@@ -19,6 +19,14 @@ run
 cd book/
 ghp-import -n -p -f _build/html
 ```
+
+I make the build/publish automatic with commit, I add this a precommit hook to `.git/hooks/pre-commit`:
+```sh
+jupyter-book clean book/
+jupyter-book build book/
+ghp-import -n -p -f book/_build/html
+```
+
 I use jupytext percent format for notebooks, install with
 ```sh
 pip install jupytext

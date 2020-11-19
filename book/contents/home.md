@@ -17,6 +17,10 @@ I think it will be helpful to represent tilings as a graph, with polygons (squar
 
 I think there are some other connectivity conditions that are similar to the last condition above but don't require the focus vertex to be connected to a complete set. For example, if a vertex is connected to only three squares, we want a condition that requires one of the squares to share vertices with the other two squares.
 
-I imagine a process that starts with the 'seed' graph that represents a hexagon with two squares top and bottom and iteratively tries to add a polygon to the graph.
+I imagine a process that starts with the 'seed' graph that represents a hexagon with two squares top and bottom and iteratively tries to add a polygon to the graph while preserving the above conditions. We can specify that the polygon should connect to at least two vertices. So each iteration, find a pair of vertices that can support another polygon.
+
+If the chosen vertices can support both a square and triangle, continue with both versions in the next iterations. If no pair of vertices can support any new polygon, retire the version. In this way the process finds all of the possible tilings.
+
+Preserving the symmetry means adding a symmetric polygon to the vertices symmetric to the chosen vertices each iteration.
 
 I call vertices that are connected to a complete set of polygons (4 squares or 6 triangles or 2 squares, 3 triangles) `internal` (in that they are 'inside' the tiling and cannot support any more polygons), otherwise `border`. The goal of the process is to make as many vertices internal as possible, in other words filling the space. 
