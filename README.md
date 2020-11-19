@@ -1,5 +1,5 @@
 # tilings
-Experiments with generating tilings
+Experiments with generating tilings https://gautsi.github.io/tilings/
 
 ## setup
 The front-end of this project is a website built with [jupyter book](https://jupyterbook.org/intro.html) and hosted on github pages. Install jupyter book with
@@ -16,5 +16,6 @@ jb build book/
 ```
 run
 ```sh
-
+cd book/
+ghp-import -n -p -f _build/html
 ```

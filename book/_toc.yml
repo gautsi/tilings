@@ -1,1 +1,6 @@
-- file: contents/landing
+- file: contents/home
+
+- part: GHCN
+  chapters:
+  - file: content/ghcn/intro
+  - file: content/ghcn/doc
