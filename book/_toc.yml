@@ -1,6 +1,5 @@
 - file: contents/home
 
-- part: GHCN
+- part: Setup
   chapters:
-  - file: content/ghcn/intro
-  - file: content/ghcn/doc
+  - file: contents/setup/drawing

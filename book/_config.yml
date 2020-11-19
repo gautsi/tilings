@@ -1,1 +1,14 @@
 title: tilings
+author: Gautam Sisodia
+repository:
+  url: https://github.com/gautsi/tilings
+html:
+  use_repository_button: true
+execute:
+  execute_notebooks: auto
+sphinx:
+  config:
+    nb_custom_formats:
+        .py:
+            - jupytext.reads
+            - fmt: py:percent

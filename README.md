@@ -10,7 +10,7 @@ We use the [ghp-import](https://github.com/c-w/ghp-import) package to build and 
 ```sh
 pip install ghp-import
 ```
-After creating jupyter book configuration (`/book/_config.yml`) and table of contents (`/book/_toc.yml`) files and building locally with
+After creating jupyter book configuration (`book/_config.yml`) and table of contents (`book/_toc.yml`) files and building locally with
 ```sh
 jb build book/
 ```
@@ -18,4 +18,17 @@ run
 ```sh
 cd book/
 ghp-import -n -p -f _build/html
+```
+I use jupytext percent format for notebooks, install with
+```sh
+pip install jupytext
+```
+Add to `book/_config.yml`:
+```yml
+sphinx:
+  config:
+    nb_custom_formats:
+        .py:
+            - jupytext.reads
+            - fmt: py:percent
 ```
