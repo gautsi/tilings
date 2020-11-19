@@ -55,6 +55,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Drawing polygons with matplotlib" href="setup/drawing.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -89,6 +90,19 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="setup/drawing.html">
+   Drawing polygons with matplotlib
+  </a>
+ </li>
+</ul>
+
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -127,7 +141,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/contents/landing.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/contents/home.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -137,6 +151,19 @@
 </div>
 
         <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/gautsi/tilings"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        
+        
+    </div>
+</div>
 
 
         <!-- Full screen (wrap in <a> to have style consistency -->
@@ -152,6 +179,20 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tilings-as-a-graph">
+   Tilings as a graph
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -161,7 +202,32 @@
                 
   <div class="section" id="tilings">
 <h1>Tilings<a class="headerlink" href="#tilings" title="Permalink to this headline">¶</a></h1>
-<p>Experiments with creating tilings</p>
+<p>I’ve become interested in space-filling tilings of the plane made with squares and equilateral triangles of the same side length. I wrote (fairly manual) code to draw the start of what I think is such a tiling of the plane, see <a class="reference external" href="http://gautsi.github.io/post/2020/11/13/tiling.html">here</a>. I have an idea for a process to find tilings more automatically, which I will lay out and try to implement here. I also noticed that I was making decisions about which shape to place next, and wonder about how many tilings there are.</p>
+<p>I want to start by considering the symmetric (six-fold) tilings with a hexagon made up with six triangles in them, with squares at the top and bottom of the hexagon, like this <code class="docutils literal notranslate"><span class="pre">fill</span> <span class="pre">in</span> <span class="pre">picture</span> <span class="pre">here</span></code>.</p>
+<div class="section" id="tilings-as-a-graph">
+<h2>Tilings as a graph<a class="headerlink" href="#tilings-as-a-graph" title="Permalink to this headline">¶</a></h2>
+<p>I think it will be helpful to represent tilings as a graph, with polygons (squares and triangles) and vertices as nodes. There are relationships between polygons and their vertices, and between symmetric vertices. Such a graph would have to satisfy some conditions to represent a tiling:</p>
+<ul class="simple">
+<li><p>all triangle nodes are connected to exactly three vertices</p></li>
+<li><p>all square nodes are connected to exactly four vertices</p></li>
+<li><p>each vertex is connected to at most</p>
+<ul>
+<li><p>four squares,</p></li>
+<li><p>six triangles or</p></li>
+<li><p>two squares and three triangles</p></li>
+</ul>
+</li>
+<li><p>two polygons can share at most two vertices</p></li>
+<li><p>if a vertex is connected to a complete set of polygons (4 squares or 6 triangles or 2 squares, 3 triangles), then every connected polygon shares a vertex with exactly two other connected polygons</p></li>
+</ul>
+<p>I think there are some other connectivity conditions that are similar to the last condition above but don’t require the focus vertex to be connected to a complete set. For example, if a vertex is connected to only three squares, we want a condition that requires one of the squares to share vertices with the other two squares.</p>
+<p>I imagine a process that starts with the ‘seed’ graph that represents a hexagon with two squares top and bottom and iteratively tries to add a polygon to the graph while preserving the above conditions. We can specify that the polygon should connect to at least two vertices. So each iteration, find a pair of vertices that can support another polygon.</p>
+<p>If the chosen vertices can support both a square and triangle, continue with both versions in the next iterations. If no pair of vertices can support any new polygon, retire the version. In this way the process finds all of the possible tilings.</p>
+<p>Preserving the symmetry means adding a symmetric polygon to the vertices symmetric to the chosen vertices each iteration.</p>
+<p>I call vertices that are connected to a complete set of polygons (4 squares or 6 triangles or 2 squares, 3 triangles) <code class="docutils literal notranslate"><span class="pre">internal</span></code> (in that they are ‘inside’ the tiling and cannot support any more polygons), otherwise <code class="docutils literal notranslate"><span class="pre">border</span></code>. The goal of the process is to make as many vertices internal as possible, in other words filling the space.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -192,13 +258,14 @@
     
     <div class='prev-next-bottom'>
         
+    <a class='right-next' id="next-link" href="setup/drawing.html" title="next page">Drawing polygons with matplotlib</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">
       <p>
         
-          By The Jupyter Book community<br/>
+          By Gautam Sisodia<br/>
         
             &copy; Copyright 2020.<br/>
       </p>

@@ -84,11 +84,24 @@
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="contents/landing.html">
+  <a class="reference internal" href="contents/home.html">
    Tilings
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/setup/drawing.html">
+   Drawing polygons with matplotlib
+  </a>
+ </li>
+</ul>
+
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -120,6 +133,19 @@
         
         
         <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/gautsi/tilings"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        
+        
+    </div>
+</div>
 
 
         <!-- Full screen (wrap in <a> to have style consistency -->
@@ -164,7 +190,7 @@
     <div class="container">
       <p>
         
-          By The Jupyter Book community<br/>
+          By Gautam Sisodia<br/>
         
             &copy; Copyright 2020.<br/>
       </p>
