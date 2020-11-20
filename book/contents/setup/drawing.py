@@ -13,6 +13,7 @@ if get_ipython() is not None:
 
 # %%
 import matplotlib.pyplot as plt
+from tilings import base as b
 
 # %%
 if get_ipython() is not None:
@@ -26,3 +27,19 @@ Testing the fill function:
 # %%
 fig, ax = plt.subplots(figsize=(5, 5))
 ax.fill([0, 1, 2, 0], [1, 1, 0, 1], c=plt.cm.Dark2.colors[0])
+
+# %% [markdown]
+"""
+Testing drawing a simple tiling:
+"""
+
+# %%
+verts = [b.Vertex(xy=[0,0]), b.Vertex(xy=[0,1])]
+t = b.Tiling(vertices=verts)
+
+
+# %%
+fig, ax = plt.subplots(figsize=(5, 5))
+t.draw(ax)
+
+# %%
