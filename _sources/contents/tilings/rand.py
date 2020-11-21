@@ -21,20 +21,34 @@ import shapely.geometry as sg
 import numpy as np
 
 # %%
-t = [sg.Polygon([[0, 0], [1, 0], [0.5, np.sqrt(3)/2]])]
+t = [sg.Polygon([[0, 0], [1, 0], [1, 1], [0, 1]]), sg.Polygon([[1, 0], [1, 1], [1 + np.sqrt(3)/2, 0.5]])]
 
 # %%
-fig, ax = plt.subplots(figsize = (5, 5))
-ax.set_xlim(left=-10, right=10)
-ax.set_ylim(bottom=-10, top=10)
+fig, ax = u.setup_plot(extent=5)
 u.draw_tiling(ax, t)
 
 # %%
-for i in range(30):
-    t = u.add_polygon(t)
+fig, ax = u.setup_plot(extent=5)
+u.draw_pts(ax, u.nearest_edge(u.union(t)))
+t = u.add_polygon(t)
+u.draw_tiling(ax, t)
+
 
 # %%
-fig, ax = plt.subplots(figsize = (5, 5))
-ax.set_xlim(left=-10, right=10)
-ax.set_ylim(bottom=-10, top=10)
 u.draw_tiling(ax, t)
+
+# %%
+u.add_polygon(t)
+
+# %%
+type(t[0].union(t[1]))
+
+# %%
+
+
+# %%
+type(fig)
+
+# %%
+
+# %%

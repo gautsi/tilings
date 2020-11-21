@@ -14,6 +14,7 @@ if get_ipython() is not None:
 # %%
 import matplotlib.pyplot as plt
 from tilings import base as b
+from tilings import utils as u
 import shapely.geometry as sg
 import shapely.affinity as sa
 import numpy as np
@@ -67,5 +68,21 @@ t = b.Tiling(vertices=verts)
 # %%
 fig, ax = plt.subplots(figsize=(5, 5))
 t.draw(ax)
+
+# %% [markdown]
+"""
+Adding a square to an edge
+"""
+
+
+# %%
+edge = [sg.Point([-1,1]), sg.Point([1,-1])]
+fig, ax = u.setup_plot(5)
+new_pts = [
+    sa.rotate(edge[1], angle=-90, origin=[edge[0].x,edge[0].y]),
+    sa.rotate(edge[0], angle=90, origin=[edge[1].x,edge[1].y]),
+]
+
+u.draw_pts(ax, edge + new_pts)
 
 # %%
