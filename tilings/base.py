@@ -1,11 +1,12 @@
 from typing import List
 from matplotlib.axes._axes import Axes
-
+import shapely.geometry as sg
 
 class Vertex(object):
     def __init__(self, polygons: List = [], xy: List[float] = None):
         self.polygons = polygons
         self.xy = xy
+        self.point = sg.Point(xy)
 
 class Polygon(object):
     def __init__(self, vertices: List[Vertex]):

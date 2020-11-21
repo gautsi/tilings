@@ -1,5 +1,8 @@
 - file: contents/home
-
 - part: Setup
   chapters:
   - file: contents/setup/drawing
+  - file: contents/setup/utils
+- part: Tilings
+  chapters:
+  - file: contents/tilings/rand
