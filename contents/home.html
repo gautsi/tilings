@@ -101,6 +101,23 @@
    Drawing polygons with matplotlib
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="setup/utils.html">
+   Utility functions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tilings
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tilings/rand.html">
+   Random tilings
+  </a>
+ </li>
 </ul>
 
 </nav> <!-- To handle the deprecated key -->
@@ -188,6 +205,8 @@
   <a class="reference internal nav-link" href="#tilings-as-a-graph">
    Tilings as a graph
   </a>
+  <ul class="nav section-nav flex-column">
+  </ul>
  </li>
 </ul>
 
@@ -225,6 +244,8 @@
 <p>If the chosen vertices can support both a square and triangle, continue with both versions in the next iterations. If no pair of vertices can support any new polygon, retire the version. In this way the process finds all of the possible tilings.</p>
 <p>Preserving the symmetry means adding a symmetric polygon to the vertices symmetric to the chosen vertices each iteration.</p>
 <p>I call vertices that are connected to a complete set of polygons (4 squares or 6 triangles or 2 squares, 3 triangles) <code class="docutils literal notranslate"><span class="pre">internal</span></code> (in that they are ‘inside’ the tiling and cannot support any more polygons), otherwise <code class="docutils literal notranslate"><span class="pre">border</span></code>. The goal of the process is to make as many vertices internal as possible, in other words filling the space.</p>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>
