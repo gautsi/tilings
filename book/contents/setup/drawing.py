@@ -86,3 +86,9 @@ new_pts = [
 u.draw_pts(ax, edge + new_pts)
 
 # %%
+c = u.complete(edge)
+fig, ax = u.setup_plot(5)
+for p in c:
+    ax.add_patch(PolygonPatch(p, alpha=0.25))
+
+# %%

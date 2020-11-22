@@ -1,36 +1,59 @@
 from tilings import base as b
 from typing import List, Dict, Tuple
 import shapely.geometry as sg
+import shapely.affinity as sa
+from shapely.ops import snap
 from shapely.coords import CoordinateSequence
 import matplotlib.pyplot as plt
 from matplotlib.axes._axes import Axes
 from matplotlib.figure import Figure
 from functools import reduce
 from descartes import PolygonPatch
+import logging
 
 
 def setup_plot(extent: int) -> Tuple[Figure, Axes]:
-    fig, ax = plt.subplots(figsize = (5, 5))
+    fig, ax = plt.subplots(figsize=(5, 5))
     ax.set_xlim(left=-extent, right=extent)
     ax.set_ylim(bottom=-extent, top=extent)
     return fig, ax
 
+
 def complete(pts: List[sg.Point]) -> List[sg.Polygon]:
     # triangles
     length = pts[0].distance(pts[1])
-    
+
     c1 = pts[0].buffer(length).boundary
     c2 = pts[1].buffer(length).boundary
-    return [sg.Polygon(pts + [i]) for i in list(c1.intersection(c2))]
+    triangles = [sg.Polygon(pts + [i]) for i in list(c1.intersection(c2))]
+
+    # squares
+    squares = [
+        sg.Polygon(
+            pts
+            + [
+                sa.rotate(pts[j], angle=i * (2 * j - 1) * 90, origin=[pts[1 - j].x, pts[1 - j].y])
+                for j in [0, 1]
+            ]
+        )
+        for i in [1, -1]
+    ]
+
+    return triangles + squares
+
 
 def draw_pts(ax: Axes, pts: List[sg.Point]) -> None:
     xs = [pt.x for pt in pts]
     ys = [pt.y for pt in pts]
     ax.scatter(xs, ys)
 
-def draw_tiling(ax: Axes, t:List[sg.Polygon]) -> None:
+def draw_polygon(ax: Axes, poly: sg.Polygon) -> None:
+    ax.add_patch(PolygonPatch(poly))
+
+def draw_tiling(ax: Axes, t: List[sg.Polygon]) -> None:
     for p in t:
-        ax.add_patch(PolygonPatch(p))
+        draw_polygon(ax, p)
+
 
 def nearest_edge(poly: sg.Polygon) -> List[sg.Point]:
     coords = list(poly.boundary.coords)
@@ -43,14 +66,23 @@ def nearest_edge(poly: sg.Polygon) -> List[sg.Point]:
             min_ind = i
     return [sg.Point(coords[min_ind]), sg.Point(coords[(min_ind + 1) % len(coords)])]
 
-def union(t:List[sg.Polygon]) -> sg.Polygon:
+
+def union(t: List[sg.Polygon]) -> sg.Polygon:
     return reduce(lambda x, y: x.union(y), t)
 
-def add_polygon(t:List[sg.Polygon]) -> List[sg.Polygon]:
+
+def add_polygon(t: List[sg.Polygon]) -> List[List[sg.Polygon]]:
     u = union(t)
     pos_ps = complete(nearest_edge(u))
+    new_t = []
     for pos_p in pos_ps:
-        if pos_p.touches(u):
-            t.append(pos_p)
-            return t
-    return None
+        snap_p = snap(pos_p, u, 0.01)
+        if snap_p.touches(u):
+            new_t.append(t+ [snap_p])
+    return new_t
+
+def update_tilings(ts: List[List[sg.Polygon]]) -> List[List[sg.Polygon]]:
+    logging.info(f"updating tilings: currently {len(ts)} tilings")
+    new_ts = [ti for t in ts for ti in add_polygon(t)]
+    logging.info(f"now {len(new_ts)} tilings")
+    return new_ts
