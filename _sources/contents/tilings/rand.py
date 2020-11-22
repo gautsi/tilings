@@ -21,34 +21,24 @@ import shapely.geometry as sg
 import numpy as np
 
 # %%
-t = [sg.Polygon([[0, 0], [1, 0], [1, 1], [0, 1]]), sg.Polygon([[1, 0], [1, 1], [1 + np.sqrt(3)/2, 0.5]])]
+seed_t = [sg.Polygon([[0, 0], [1, 0], [1, 1], [0, 1]]), sg.Polygon([[1, 0], [1, 1], [1 + np.sqrt(3)/2, 0.5]])]
 
 # %%
 fig, ax = u.setup_plot(extent=5)
-u.draw_tiling(ax, t)
+u.draw_tiling(ax, seed_t)
 
 # %%
-fig, ax = u.setup_plot(extent=5)
-u.draw_pts(ax, u.nearest_edge(u.union(t)))
-t = u.add_polygon(t)
-u.draw_tiling(ax, t)
-
-
-# %%
-u.draw_tiling(ax, t)
+ts = [seed_t]
+for i in range(20):
+    ts = u.update_tilings(ts)
+    print(i, len(ts))
 
 # %%
-u.add_polygon(t)
+next_ts = u.update_tilings(ts)
+print(len(next_ts))
 
 # %%
-type(t[0].union(t[1]))
-
-# %%
-
-
-# %%
-type(fig)
-
-# %%
-
-# %%
+for t in ts[:10]:
+    fig, ax = u.setup_plot(extent=5)
+    u.draw_pts(ax, u.nearest_edge(u.union(t)))
+    u.draw_tiling(ax, t)
