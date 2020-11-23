@@ -202,10 +202,34 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methods">
+   Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shapely">
+     shapely
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#tilings-as-a-graph">
    Tilings as a graph
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#simpler-version">
+   Simpler version
+  </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#more-complicated-version">
+     More complicated version
+    </a>
+    <ul class="nav section-nav flex-column">
+    </ul>
+   </li>
   </ul>
  </li>
 </ul>
@@ -222,10 +246,40 @@
   <div class="section" id="tilings">
 <h1>Tilings<a class="headerlink" href="#tilings" title="Permalink to this headline">¶</a></h1>
 <p>I’ve become interested in space-filling tilings of the plane made with squares and equilateral triangles of the same side length. I wrote (fairly manual) code to draw the start of what I think is such a tiling of the plane, see <a class="reference external" href="http://gautsi.github.io/post/2020/11/13/tiling.html">here</a>. I have an idea for a process to find tilings more automatically, which I will lay out and try to implement here. I also noticed that I was making decisions about which shape to place next, and wonder about how many tilings there are.</p>
-<p>I want to start by considering the tilings with a hexagon made up with six triangles in them, with squares at the top and bottom of the hexagon, like this <code class="docutils literal notranslate"><span class="pre">fill</span> <span class="pre">in</span> <span class="pre">picture</span> <span class="pre">here</span></code>.</p>
+<p>I want to start by considering the tilings with a hexagon made up with six triangles in them, with squares at the top and bottom of the hexagon, like this:</p>
+<div class="cell_output docutils container">
+<img alt="../_images/rand_5_0.png" src="../_images/rand_5_0.png" />
+</div>
+<div class="section" id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="shapely">
+<h3>shapely<a class="headerlink" href="#shapely" title="Permalink to this headline">¶</a></h3>
+<p>My first attempt uses <a class="reference external" href="https://shapely.readthedocs.io/en/latest/">shapely</a>, an impressively featured geometry library, for finding tilings. Tiles are Polygon objects, tilings are lists of Polygons and the code makes extensive use of shapely functions for deciding where and how to place new tiles. Here is an example tiling that came from this process:</p>
+<div class="cell_output docutils container">
+<img alt="../_images/rand_13_0.png" src="../_images/rand_13_0.png" />
+</div>
+<p>Unfortunately, as a tiling’s size grows, shapely’s floating point calculations start to introduce artifacts to the tiling like tiny spaces between tiles. I’ve found these artfacts difficult to correct for, and uncorrected they make it hard to build a clean process for adding tiles. See for example the shapely calculated union of the tiles in the example tiling above:</p>
+<div class="cell_output docutils container">
+<img alt="../_images/rand_14_0.png" src="../_images/rand_14_0.png" />
+</div>
+<p>Notice the lines into the polygon that represent the tiny spaces between tiles, and my code picks up on them as possible places to add tiles and fails.</p>
+<p>But going through this experiment has made me realize that there are many more tilings with squares and triangles than I thought!</p>
+</div>
+</div>
 <div class="section" id="tilings-as-a-graph">
 <h2>Tilings as a graph<a class="headerlink" href="#tilings-as-a-graph" title="Permalink to this headline">¶</a></h2>
-<p>I think it will be helpful to represent tilings as a graph, with polygons (squares and triangles) and vertices as nodes. There are relationships between polygons and their vertices (and may include in the future relationships between symmetric vertices). Such a graph would have to satisfy some conditions to represent a tiling:</p>
+<p>I think it will be helpful to represent tilings as a graph.</p>
+</div>
+<div class="section" id="simpler-version">
+<h2>Simpler version<a class="headerlink" href="#simpler-version" title="Permalink to this headline">¶</a></h2>
+<p>The nodes in the graph are the tiles of the tiling, and relationships between tiles that share an edge. For such a graph to represent a tiling, it would have to satisfy some conditions:</p>
+<ul class="simple">
+<li><p>all triangle tiles are connected to exactly three other tiles</p></li>
+<li><p>all square tiles are connected to exactly four other tiles</p></li>
+</ul>
+<div class="section" id="more-complicated-version">
+<h3>More complicated version<a class="headerlink" href="#more-complicated-version" title="Permalink to this headline">¶</a></h3>
+<p>A more complicated idea has polygons and vertices as nodes. There are relationships between polygons and their vertices (and may include in the future relationships between symmetric vertices). Such a graph would have to satisfy some conditions to represent a tiling:</p>
 <ul class="simple">
 <li><p>all triangle nodes are connected to exactly three vertices</p></li>
 <li><p>all square nodes are connected to exactly four vertices</p></li>
@@ -247,6 +301,7 @@
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 </div>
