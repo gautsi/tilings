@@ -18,6 +18,7 @@ def setup_plot(extent: int) -> Tuple[Figure, Axes]:
     fig, ax = plt.subplots(figsize=(5, 5))
     ax.set_xlim(left=-extent, right=extent)
     ax.set_ylim(bottom=-extent, top=extent)
+    ax.axis("off")
     return fig, ax
 
 

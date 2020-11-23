@@ -2,10 +2,34 @@
 
 I've become interested in space-filling tilings of the plane made with squares and equilateral triangles of the same side length. I wrote (fairly manual) code to draw the start of what I think is such a tiling of the plane, see [here](http://gautsi.github.io/post/2020/11/13/tiling.html). I have an idea for a process to find tilings more automatically, which I will lay out and try to implement here. I also noticed that I was making decisions about which shape to place next, and wonder about how many tilings there are.
 
-I want to start by considering the tilings with a hexagon made up with six triangles in them, with squares at the top and bottom of the hexagon, like this `fill in picture here`.
+I want to start by considering the tilings with a hexagon made up with six triangles in them, with squares at the top and bottom of the hexagon, like this:
+
+```{glue:} seed
+```
+
+## Methods
+### shapely
+My first attempt uses [shapely](https://shapely.readthedocs.io/en/latest/), an impressively featured geometry library, for finding tilings. Tiles are Polygon objects, tilings are lists of Polygons and the code makes extensive use of shapely functions for deciding where and how to place new tiles. Here is an example tiling that came from this process:
+```{glue:} shapely_ex
+``` 
+
+Unfortunately, as a tiling's size grows, shapely's floating point calculations start to introduce artifacts to the tiling like tiny spaces between tiles. I've found these artfacts difficult to correct for, and uncorrected they make it hard to build a clean process for adding tiles. See for example the shapely calculated union of the tiles in the example tiling above:  
+```{glue:} artifact_ex
+``` 
+Notice the lines into the polygon that represent the tiny spaces between tiles, and my code picks up on them as possible places to add tiles and fails.
+
+But going through this experiment has made me realize that there are many more tilings with squares and triangles than I thought!
 
 ## Tilings as a graph
-I think it will be helpful to represent tilings as a graph, with polygons (squares and triangles) and vertices as nodes. There are relationships between polygons and their vertices (and may include in the future relationships between symmetric vertices). Such a graph would have to satisfy some conditions to represent a tiling:
+I think it will be helpful to represent tilings as a graph. 
+
+## Simpler version
+The nodes in the graph are the tiles of the tiling, and relationships between tiles that share an edge. For such a graph to represent a tiling, it would have to satisfy some conditions:
+- all triangle tiles are connected to exactly three other tiles
+- all square tiles are connected to exactly four other tiles
+
+### More complicated version
+A more complicated idea has polygons and vertices as nodes. There are relationships between polygons and their vertices (and may include in the future relationships between symmetric vertices). Such a graph would have to satisfy some conditions to represent a tiling:
 - all triangle nodes are connected to exactly three vertices
 - all square nodes are connected to exactly four vertices
 - each vertex is connected to at most
