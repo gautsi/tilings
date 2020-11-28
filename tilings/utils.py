@@ -10,6 +10,7 @@ from matplotlib.figure import Figure
 from functools import reduce
 from descartes import PolygonPatch
 import logging
+import numpy as np
 
 eps = 0.01
 
@@ -80,7 +81,7 @@ def union(t: List[sg.Polygon]) -> sg.Polygon:
 
 
 def snap_pts(pts: List[sg.Point], u: sg.Polygon) -> List[sg.Point]:
-    return [snap(pt, u, 0.01) for pt in pts]
+    return [snap(pt, u, 0.03) for pt in pts]
 
 
 def small_buffer(p: sg.Polygon) -> sg.Polygon:
@@ -129,3 +130,10 @@ def update_tilings(ts: List[b.Tiling]) -> List[b.Tiling]:
     new_ts = [ti for t in ts for ti in add_polygon(t)]
     logging.info(f"now {len(new_ts)} tilings")
     return new_ts
+
+
+def get_seed() -> b.Tiling:
+    triangle_pts = [sg.Point(i) for i in [[0,0], [-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2]]]
+    square_pts = [sg.Point(i) for i in [[-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2], [0.5, 1 + np.sqrt(3)/2], [-0.5, 1 + np.sqrt(3)/2]]]
+    seed_polys = [sg.Polygon(pts) for pts in repeat(triangle_pts)[0] + repeat(square_pts)[0]]
+    return b.Tiling(polys=seed_polys, u=union(seed_polys))

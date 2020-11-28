@@ -23,10 +23,7 @@ import numpy as np
 from myst_nb import glue
 
 # %%
-triangle_pts = [sg.Point(i) for i in [[0,0], [-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2]]]
-square_pts = [sg.Point(i) for i in [[-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2], [0.5, 1 + np.sqrt(3)/2], [-0.5, 1 + np.sqrt(3)/2]]]
-seed_polys = [sg.Polygon(pts) for pts in u.repeat(triangle_pts)[0] + u.repeat(square_pts)[0]]
-seed_t = b.Tiling(polys=seed_polys, u=u.union(seed_polys))
+seed_t = u.get_seed()
 
 # %%
 fig, ax = u.setup_plot(extent=2)
@@ -65,7 +62,7 @@ new_seed = ts[2]
 
 # %%
 ts2 = [new_seed]
-for i in range(23):
+for i in range(38):
     ts2 = u.update_tilings(ts2)
     print(i, len(ts2))
     irreg = u.get_irreg(ts2)
@@ -75,8 +72,14 @@ for i in range(23):
 
 
 # %%
-for t in ts2:
-    fig, ax = u.setup_plot(extent=6)
+for t in ts2[:10]:
+    fig, ax = u.setup_plot(extent=9)
+    u.draw_pts(ax, u.nearest_edge(t.u))
+    u.draw_tiling(ax, t)
+
+# %%
+for t in ts2[-10:]:
+    fig, ax = u.setup_plot(extent=9)
     u.draw_pts(ax, u.nearest_edge(t.u))
     u.draw_tiling(ax, t)
 
