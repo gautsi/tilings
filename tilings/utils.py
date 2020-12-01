@@ -11,6 +11,7 @@ from functools import reduce
 from descartes import PolygonPatch
 import logging
 import numpy as np
+from networkx.classes.digraph import DiGraph
 
 eps = 0.01
 
@@ -137,3 +138,13 @@ def get_seed() -> b.Tiling:
     square_pts = [sg.Point(i) for i in [[-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2], [0.5, 1 + np.sqrt(3)/2], [-0.5, 1 + np.sqrt(3)/2]]]
     seed_polys = [sg.Polygon(pts) for pts in repeat(triangle_pts)[0] + repeat(square_pts)[0]]
     return b.Tiling(polys=seed_polys, u=union(seed_polys))
+
+def update_tiling_tree(d: DiGraph) -> None:
+    leaves = [n for n in d.nodes() if d.out_degree(n) == 0 and n.can_grow]
+    for leaf in leaves:
+        new_tilings = add_polygon(leaf)
+        if len(new_tilings) == 0:
+            leaf.can_grow = False
+        else:
+            d.add_nodes_from(new_tilings)
+            d.add_edges_from([(leaf, t) for t in new_tilings])

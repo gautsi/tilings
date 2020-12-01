@@ -6,6 +6,7 @@ class Tiling(object):
     def __init__(self, polys: List[sg.Polygon] = [], u: sg.Polygon = None):
         self.polys = polys
         self.u = u
+        self.can_grow = True
 
     def check_shapes(self):
         irreg = False

@@ -6,3 +6,4 @@
 - part: Tilings
   chapters:
   - file: contents/tilings/rand
+  - file: contents/tilings/tree
