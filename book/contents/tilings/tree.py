@@ -129,3 +129,8 @@ def plot_tree(tiling_tree) -> None:
     graph_plot.add_tools(HoverTool(tooltips=None, callback=callback, renderers=[gc]))
 
     show(row(graph_plot, tiling_plot))
+
+
+# %%
+plot_tree(tiling_tree)
+# %%
