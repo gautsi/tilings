@@ -58,11 +58,11 @@ for t in ts:
     u.draw_tiling(ax, t)
 
 # %%
-new_seed = ts[2]
+new_seed = ts[1]
 
 # %%
 ts2 = [new_seed]
-for i in range(38):
+for i in range(30):
     ts2 = u.update_tilings(ts2)
     print(i, len(ts2))
     irreg = u.get_irreg(ts2)
@@ -82,6 +82,12 @@ for t in ts2[-10:]:
     fig, ax = u.setup_plot(extent=9)
     u.draw_pts(ax, u.nearest_edge(t.u))
     u.draw_tiling(ax, t)
+
+# %%
+p = ts2[-1].polys[-1]
+
+# %%
+list(p.exterior.coords)
 
 # %%
 glue("shapely_ex", fig)
