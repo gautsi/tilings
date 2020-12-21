@@ -102,7 +102,7 @@ def plot_tree(tiling_tree) -> None:
         source=edge_source,
     )
 
-    tiling_plot.patches(
+    tp = tiling_plot.patches(
         xs="xs",
         ys="ys",
         source=tiling_source,
@@ -129,3 +129,8 @@ def plot_tree(tiling_tree) -> None:
     graph_plot.add_tools(HoverTool(tooltips=None, callback=callback, renderers=[gc]))
 
     show(row(graph_plot, tiling_plot))
+
+
+# %%
+plot_tree(tiling_tree)
+# %%
