@@ -16,6 +16,11 @@ from networkx.classes.digraph import DiGraph
 eps = 0.01
 
 
+def rnd(pt: sg.Point) -> sg.Point:
+    places = 4
+    return sg.Point([round(pt.x, places), round(pt.y, places)])
+
+
 def setup_plot(extent: int) -> Tuple[Figure, Axes]:
     fig, ax = plt.subplots(figsize=(5, 5))
     ax.set_xlim(left=-extent, right=extent)
@@ -30,17 +35,17 @@ def complete(pts: List[sg.Point]) -> List[List[sg.Point]]:
 
     c1 = pts[0].buffer(length).boundary
     c2 = pts[1].buffer(length).boundary
-    triangles = [pts + [i] for i in list(c1.intersection(c2))]
+    triangles = [pts + [i] for i in map(rnd, list(c1.intersection(c2)))]
 
     # squares
     squares = [
         pts
         + [
-            sa.rotate(
+            rnd(sa.rotate(
                 pts[j],
                 angle=i * (2 * j - 1) * 90,
                 origin=[pts[1 - j].x, pts[1 - j].y],
-            )
+            ))
             for j in [0, 1]
         ]
         for i in [1, -1]
@@ -111,9 +116,9 @@ def repeat(
     else:
         u = u.union(sg.Polygon(pts))
     for i in range(5):
-        new_pts = snap_pts(
+        new_pts = list(map(rnd, snap_pts(
             [sa.rotate(pt, (i + 1) * 60, origin=[0, 0]) for pt in pts], u
-        )
+        )))
         poly_pts.append(new_pts)
         u = u.union(sg.Polygon(new_pts))
     return poly_pts, u
@@ -134,10 +139,24 @@ def update_tilings(ts: List[b.Tiling]) -> List[b.Tiling]:
 
 
 def get_seed() -> b.Tiling:
-    triangle_pts = [sg.Point(i) for i in [[0,0], [-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2]]]
-    square_pts = [sg.Point(i) for i in [[-0.5, np.sqrt(3)/2], [0.5, np.sqrt(3)/2], [0.5, 1 + np.sqrt(3)/2], [-0.5, 1 + np.sqrt(3)/2]]]
-    seed_polys = [sg.Polygon(pts) for pts in repeat(triangle_pts)[0] + repeat(square_pts)[0]]
+    triangle_pts = [
+        rnd(sg.Point(i))
+        for i in [[0, 0], [-0.5, np.sqrt(3) / 2], [0.5, np.sqrt(3) / 2]]
+    ]
+    square_pts = [
+        rnd(sg.Point(i))
+        for i in [
+            [-0.5, np.sqrt(3) / 2],
+            [0.5, np.sqrt(3) / 2],
+            [0.5, 1 + np.sqrt(3) / 2],
+            [-0.5, 1 + np.sqrt(3) / 2],
+        ]
+    ]
+    seed_polys = [
+        sg.Polygon(pts) for pts in repeat(triangle_pts)[0] + repeat(square_pts)[0]
+    ]
     return b.Tiling(polys=seed_polys, u=union(seed_polys))
+
 
 def update_tiling_tree(d: DiGraph) -> None:
     leaves = [n for n in d.nodes() if d.out_degree(n) == 0 and n.can_grow]
